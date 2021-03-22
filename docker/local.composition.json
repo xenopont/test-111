@@ -1,0 +1,11 @@
+{
+  "version": "3.7",
+  "services": {
+    "client": {
+      "container_name": "client",
+      "image": "client-image",
+      "ports": [ "9092:3000" ],
+      "volumes": [ "../:/srv/client" ]
+    }
+  }
+}

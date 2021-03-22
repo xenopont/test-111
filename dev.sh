@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+echo "Building servers..."
+echo ""
+docker build -t client-image --file ./docker/local.dockerfile .
+echo "Starting servers..."
+echo ""
+docker-compose -p react111 --file ./docker/local.composition.json up -d
+echo "                                                               "
+echo "                                                               "
+echo "                                                               "
+echo "    ╔═════════════════════════════════════════════════════╗    "
+echo "    ║ Client dev environment                              ║    "
+echo "    ╟─────────────────────────────────────────────────────╢    "
+echo "    ║                                                     ║    "
+echo "    ║ Command list:                                       ║    "
+echo "    ║                                                     ║    "
+echo "    ║     • install - installs npm dependencies           ║    "
+echo "    ║     • test    - starts unit testing                 ║    "
+echo "    ║     • build   - builds the production app           ║    "
+echo "    ║     • watch   - starts watching source file changes ║    "
+echo "    ║                 and rebuilds them automatically     ║    "
+echo "    ║                                                     ║    "
+echo "    ╟─────────────────────────────────────────────────────╢    "
+echo "    ║                                                     ║    "
+echo "    ║ - open http://localhost:9092/ in your browser       ║    "
+echo "    ║     to see the current status of the frontend       ║    "
+echo "    ║ - type 'exit' to leave and stop the dev environment ║    "
+echo "    ║                                                     ║    "
+echo "    ╚═════════════════════════════════════════════════════╝    "
+echo "                                                               "
+echo "                                                               "
+echo "                                                               "
+docker exec -it client ash
+echo "Stopping servers..."
+docker-compose --file ./docker/local.composition.json stop
+echo "Done."
