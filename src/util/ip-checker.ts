@@ -11,12 +11,21 @@ const addListener = (newListener: StateConverter<string>): void => {
     listeners.push(newListener);
 };
 
-const getIp = (): string => {
-    return 'Who knows?'; // @todo replace with an API call
+const getIp = async (): Promise<string> => {
+    const response = await fetch('https://api.ipify.org', {
+        credentials: 'omit',
+        mode: 'cors',
+        redirect: 'follow',
+    });
+    if (!response.ok) {
+        return 'Error';
+    }
+
+    return await response.text();
 }
 
-const refreshIp = (): void => {
-    const newIp: string = getIp();
+const refreshIp = async (): Promise<void> => {
+    const newIp: string = await getIp();
     if (newIp === current) {
         return;
     }
@@ -45,8 +54,16 @@ const stop = (): void => {
     intervalHandle = 0;
 };
 
-export default {
+export interface IpCheckerInterface {
+    addListener: (newListener: StateConverter<string>) => void,
+    start: () => void,
+    stop: () => void,
+}
+
+const ipChecker: IpCheckerInterface = {
     addListener,
     start,
     stop,
 };
+
+export default ipChecker;
