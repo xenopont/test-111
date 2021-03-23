@@ -3,7 +3,7 @@ import IpButton from "./components/ip-button";
 function App() {
   return (
     <div>
-      <IpButton/>
+      <IpButton title="My Current IP" />
     </div>
   );
 }
