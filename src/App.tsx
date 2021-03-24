@@ -1,4 +1,4 @@
-import IpButton from "./components/ip-button";
+import IpButton from "./components/IpButton";
 
 function App() {
   return (

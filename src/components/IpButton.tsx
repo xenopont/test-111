@@ -1,5 +1,5 @@
-import { ipButtonClassName } from './ip-button/style';
-import ipChecker from '../util/ip-checker';
+import { ipButtonClassName } from './IpButton/style';
+import IpChecker from '../util/IpChecker';
 import { useState } from 'react';
 
 export interface ipButtonPropsInterface {
@@ -13,8 +13,8 @@ const IpButton = (props: ipButtonPropsInterface) => {
         <button type="button" className={ipButtonClassName}>{title ?? 'No Title'}</button>
     );
 
-    ipChecker.addListener(setTitle);
-    ipChecker.start();
+    IpChecker.addListener(setTitle);
+    IpChecker.start();
 
     return button;
 }

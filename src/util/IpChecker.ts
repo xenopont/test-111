@@ -1,6 +1,7 @@
 import { StateConverter } from '../core/StateConverter';
+import ApiClient from './ApiClient';
 
-const refreshTimeout: number = 2000;
+const refreshTimeout: number = 300000;
 const listeners: StateConverter<string>[] = [];
 let current: string = 'Unknown IP';
 
@@ -12,17 +13,8 @@ const addListener = (newListener: StateConverter<string>): void => {
 };
 
 const getIp = async (): Promise<string> => {
-    const response = await fetch('https://api.ipify.org', {
-        credentials: 'omit',
-        mode: 'cors',
-        redirect: 'follow',
-    });
-    if (!response.ok) {
-        return 'Error';
-    }
-
-    return await response.text();
-}
+    return await ApiClient.getText('https://api.ipify.org');
+};
 
 const refreshIp = async (): Promise<void> => {
     const newIp: string = await getIp();
@@ -31,7 +23,7 @@ const refreshIp = async (): Promise<void> => {
     }
     current = newIp;
     updateListeners(newIp);
-}
+};
 
 const updateListeners = (newIp: string) => {
     listeners.forEach((l: StateConverter<string>) => {
@@ -46,6 +38,7 @@ const start = (): void => {
         return;
     }
 
+    refreshIp().then();
     intervalHandle = window.setInterval(refreshIp, refreshTimeout);
 };
 
@@ -60,10 +53,10 @@ export interface IpCheckerInterface {
     stop: () => void,
 }
 
-const ipChecker: IpCheckerInterface = {
+const IpChecker: IpCheckerInterface = {
     addListener,
     start,
     stop,
 };
 
-export default ipChecker;
+export default IpChecker;
