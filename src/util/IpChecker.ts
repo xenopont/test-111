@@ -2,15 +2,16 @@ import { StateConverter } from '../core/StateConverter';
 import ApiClient from './ApiClient';
 
 const refreshTimeout: number = 300000;
-const listeners: StateConverter<string>[] = [];
+const listeners = new Set<StateConverter<string>>();
 let current: string = 'Unknown IP';
 
 const addListener = (newListener: StateConverter<string>): void => {
-    if (listeners.find((l) => l === newListener)) {
-        return;
-    }
-    listeners.push(newListener);
+    listeners.add(newListener);
 };
+
+const removeListener = (oldListener: StateConverter<string>): void => {
+    listeners.delete(oldListener);
+}
 
 const getIp = async (): Promise<string> => {
     return await ApiClient.getText('https://api.ipify.org');
@@ -47,14 +48,9 @@ const stop = (): void => {
     intervalHandle = 0;
 };
 
-export interface IpCheckerInterface {
-    addListener: (newListener: StateConverter<string>) => void,
-    start: () => void,
-    stop: () => void,
-}
-
-const IpChecker: IpCheckerInterface = {
+const IpChecker = {
     addListener,
+    removeListener,
     start,
     stop,
 };
