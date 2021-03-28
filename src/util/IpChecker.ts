@@ -1,8 +1,14 @@
 import ApiClient from './ApiClient';
 import { Dispatch, SetStateAction } from "react";
 
-/** timeout to refresh the IP via an API call, can be parametrised later */
-const refreshTimeout: number = 300000;
+let refreshTimeout: number = 300000; // timeout to refresh the IP via an API call
+const setRefreshTimeout = (timeout: number): number => {
+    if (timeout === parseInt(timeout.toString(10), 10) && timeout >= 0) {
+        refreshTimeout = timeout;
+    }
+
+    return refreshTimeout;
+}
 /** set of listeners to receive an updated IP value */
 const listeners = new Set<Dispatch<SetStateAction<string>>>();
 /** IP value cache to compare with a newly received one */
@@ -87,6 +93,7 @@ const stop = (): void => {
 const IpChecker = {
     addListener,
     removeListener,
+    setRefreshTimeout,
     start,
     stop,
 };
