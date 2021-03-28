@@ -1,3 +1,6 @@
+/**
+ * Queue to add and receive typed values in order FIFO
+ */
 export default class Queue<T> {
     private storage: T[] = [];
 

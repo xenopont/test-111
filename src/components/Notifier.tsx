@@ -1,5 +1,4 @@
 import { closeId, messageId, notifierId } from './Notifier/states';
-import { CaptionOwner } from '../core/CaptionOwner';
 import {Dispatch, SetStateAction, useState} from 'react';
 import Queue from '../core/Queue';
 
@@ -21,24 +20,19 @@ const classVisible: string = 'visible';
  * Some messages close automatically to not bother the user.
  * The others should be closed manually (supposed to show important information).
  *
- * @param props Contains the initial message, typically will be never visible
  * @constructor
  */
-const Notifier = (props: CaptionOwner<NotifierMessage>) => {
-    const [ message, setMessage ] = useState<NotifierMessage>(props.caption ?? '');
+const Notifier = () => {
+    const [ message, setMessage ] = useState<NotifierMessage>('');
     const [ className, setClassName] = useState<string>(classHidden);
     messageDispatcher = setMessage;
     classNameDispatcher = setClassName;
-
-    const closeClickHandler = () => {
-        closeCurrentMessage();
-    };
 
     return (
         <div id={notifierId} className={className}>
             <div id={messageId}>
                 {message}
-                <span id={closeId} onClick={closeClickHandler}>&#10799;</span>
+                <span id={closeId} onClick={closeCurrentMessage}>&#10799;</span>
             </div>
         </div>
     );
@@ -46,17 +40,12 @@ const Notifier = (props: CaptionOwner<NotifierMessage>) => {
 
 export default Notifier;
 
-/** A pause between one message is closed and another appears */
-const msNotificationTimespan: number = 400;
-/** Time to display one message, if it closes automatically */
-const msNotificationDisplayTime: number = 3000;
+const msNotificationTimespan: number = 400; // A pause between one message is closed and another appears
+const msNotificationDisplayTime: number = 3000; // Time to display one message, if it closes automatically
 
-/** Current state of the notifier */
-let isOpen: boolean = false;
-/** Hook to change the message */
-let messageDispatcher: Dispatch<SetStateAction<NotifierMessage>>|null = null;
-/** Hook to change the visibility of the notifier */
-let classNameDispatcher: Dispatch<SetStateAction<string>>|null = null;
+let isOpen: boolean = false; // Current state of the notifier
+let messageDispatcher: Dispatch<SetStateAction<NotifierMessage>>|null = null; // Hook to change the message
+let classNameDispatcher: Dispatch<SetStateAction<string>>|null = null; // Hook to change the visibility of the notifier
 
 const closeCurrentMessage = (): void => {
     if (!isOpen || classNameDispatcher === null) {
@@ -84,7 +73,7 @@ const displayNextMessage = (): void => {
 };
 
 /**
- * Public function which allows to put a new message into the display queue.
+ * Allows to put a new message into the display queue.
  * It will be displayed instantly if the queue were empty. Will wait for its turn, otherwise.
  *
  * @param message

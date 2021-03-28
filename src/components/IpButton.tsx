@@ -1,8 +1,11 @@
 import { ipButtonClassName } from './IpButton/style';
 import IpChecker from '../util/IpChecker';
 import { useEffect, useState } from 'react';
-import { CaptionOwner } from '../core/CaptionOwner';
 import { showMessage } from './Notifier';
+
+interface CaptionOwner<T> {
+    caption?: T;
+}
 
 /**
  * IpButton component

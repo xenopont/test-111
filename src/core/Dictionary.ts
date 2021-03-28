@@ -1,5 +1,5 @@
 /**
- * A simple Dictionary with string keys and typed values
+ * Simple Dictionary with string keys and typed values
  */
 export type Dictionary<T> = {
     [ key: string ]: T,
