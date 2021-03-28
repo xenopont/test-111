@@ -1,5 +1,5 @@
 import IpButton from './components/IpButton';
-import Notifier, { NotifierMessage } from './components/Notifier';
+import Notifier from './components/Notifier';
 
 function App() {
     return (
