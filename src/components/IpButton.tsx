@@ -2,7 +2,7 @@ import { ipButtonClassName } from './IpButton/style';
 import IpChecker from '../util/IpChecker';
 import { useEffect, useState } from 'react';
 import { CaptionOwner } from '../core/CaptionOwner';
-import {showMessage} from "./Notifier";
+import { showMessage } from './Notifier';
 
 /**
  * IpButton component
@@ -27,6 +27,8 @@ const IpButton = (props: CaptionOwner<string>) => {
         <button type="button" onClick={() => { clickHandler(ip) }} className={ipButtonClassName}>My IP: {ip}</button>
     );
 };
+
+export default IpButton;
 
 /**
  * OnClick handler for the button, copies the provided IP to the clipboard.
@@ -59,5 +61,3 @@ const clickHandler = (ip: string) => {
             );
         });
 };
-
-export default IpButton;
