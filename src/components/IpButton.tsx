@@ -1,10 +1,8 @@
 import { ipButtonClassName } from './IpButton/style';
 import IpChecker from '../util/IpChecker';
 import { useEffect, useState } from 'react';
-
-interface CaptionOwner {
-    caption?: string;
-}
+import { CaptionOwner } from '../core/CaptionOwner';
+import {showMessage} from "./Notifier";
 
 /**
  * IpButton component
@@ -12,11 +10,15 @@ interface CaptionOwner {
  * @param props Contains the IP to show in the button additionally to its text
  * @constructor
  */
-const IpButton = (props: CaptionOwner) => {
+const IpButton = (props: CaptionOwner<string>) => {
     const [ ip, setIp ] = useState<string>(props.caption ?? 'No Info');
     useEffect(() => {
-        IpChecker.addListener(setIp);
-        IpChecker.start();
+        // to disable linter warning
+        const initIpChecker = () => {
+            IpChecker.addListener(setIp);
+            IpChecker.start();
+        };
+        initIpChecker();
 
         return () => { IpChecker.removeListener(setIp) };
     });
@@ -34,10 +36,28 @@ const IpButton = (props: CaptionOwner) => {
  */
 const clickHandler = (ip: string) => {
     if (!navigator.clipboard) {
-        // @todo a popup with the IP to copy from
+        showMessage(
+            <div>
+                Your browser doesn't support clipboard manipulation.<br/>
+                Please, copy you IP {ip} manually and close this message.
+            </div>,
+            false
+        );
         return;
     }
-    navigator.clipboard.writeText(ip).then(/* @todo a popup to show success */).catch(/* @todo a popup to show error and IP to copy from */);
+    navigator.clipboard.writeText(ip)
+        .then(() => {
+            showMessage('Your current IP is successfully copied to clipboard');
+        })
+        .catch(() => {
+            showMessage(
+                <div>
+                    An error occurred during an attempt to use clipboard.<br/>
+                    Please, copy you IP {ip} manually and close this message.
+                </div>,
+                false
+            );
+        });
 };
 
 export default IpButton;
