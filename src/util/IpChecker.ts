@@ -36,6 +36,11 @@ const removeListener = (oldListener: Dispatch<SetStateAction<string>>): void => 
     }
 }
 
+const removeAllListeners = (): void => {
+    listeners.clear();
+    stop();
+}
+
 /**
  * Makes an HTTP request to a third party API to get the current IP
  */
@@ -86,13 +91,16 @@ const start = (): void => {
 
 /** Stops monitoring IP changes */
 const stop = (): void => {
-    window.clearInterval(intervalHandle);
-    intervalHandle = 0;
+    if (intervalHandle > 0) {
+        window.clearInterval(intervalHandle);
+        intervalHandle = 0;
+    }
 };
 
 const IpChecker = {
     addListener,
     removeListener,
+    removeAllListeners,
     setRefreshTimeout,
     start,
     stop,
