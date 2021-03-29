@@ -9,7 +9,7 @@ const activeShadow: string = 'inset 0 2px 4px 1px rgba(0, 0, 0, 0.3)';
 
 insertRules({
     [`.${ipButtonClassName}`]: {
-        background: 'linear-gradient(#f6f7f8 0%, #ffffff 50%, #f8f7f5 50%, #fcfbf8 100%)',
+        background: 'linear-gradient(to bottom, #f6f7f8 0%, #ffffff 50%, #f8f7f5 50%, #fcfbf8 100%)',
         border: '1px solid #c8c8c8',
         'box-shadow': borderShadow,
         'border-radius': '4px',
@@ -26,5 +26,10 @@ insertRules({
     },
     [`.${ipButtonClassName}:active`]: {
         'box-shadow': `${activeShadow}, ${focusBorderShadow}`,
-    }
+    },
+    [`.${ipButtonClassName}:disabled`]: {
+        background: 'linear-gradient(to bottom, #f4f3f0 0%, #fcfbf8 100%)',
+        color: '#ccc8c0',
+        'text-shadow': '1px 1px 0 rgba(255, 255, 255, 1)',
+    },
 });

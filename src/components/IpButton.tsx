@@ -14,7 +14,7 @@ interface CaptionOwner<T> {
  * @constructor
  */
 const IpButton = (props: CaptionOwner<string>) => {
-    const [ ip, setIp ] = useState<string>(props.caption ?? 'No Info');
+    const [ ip, setIp ] = useState<string>(props.caption ?? '');
     useEffect(() => {
         // to disable linter warning
         const initIpChecker = () => {
@@ -22,12 +22,24 @@ const IpButton = (props: CaptionOwner<string>) => {
             IpChecker.start();
         };
         initIpChecker();
+        if (ip === '') {
+            showMessage(
+                <div>
+                    A network error occurred during an attempt to determine your IP address.<br/>
+                    That might happen if you use an ad blocker.
+                </div>,
+                false
+            );
+        }
 
         return () => { IpChecker.removeListener(setIp) };
     });
+    const disabled: boolean = ip === '';
 
     return (
-        <button type="button" onClick={() => { clickHandler(ip) }} className={ipButtonClassName}>My IP: {ip}</button>
+        <button type="button" onClick={() => { clickHandler(ip) }} className={ipButtonClassName} disabled={disabled}>
+            My IP: {ip === '' ? 'Unknown' : ip}
+        </button>
     );
 };
 
@@ -52,7 +64,7 @@ const clickHandler = (ip: string) => {
     }
     navigator.clipboard.writeText(ip)
         .then(() => {
-            showMessage('Your current IP is successfully copied to clipboard');
+            showMessage('Your current IP was successfully copied to clipboard');
         })
         .catch(() => {
             showMessage(
